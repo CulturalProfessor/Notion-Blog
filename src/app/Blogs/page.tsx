@@ -1,13 +1,18 @@
-import { fetchBlogs } from "../../../lib/notion";
+import { fetchBlogs } from "../../lib/notion";
 import Image from "next/image";
 import Link from "next/link";
 
 export default async function Page() {
   const response = await fetchBlogs();
   const formatDate = (dateString: string) => {
-    const options = { year: "numeric", month: "long", day: "numeric" };
+    const options: Intl.DateTimeFormatOptions = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
+  
 
   return (
     <div className="container mx-auto py-8 font-sans">
