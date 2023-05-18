@@ -1,5 +1,9 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+## To Connect Notion API
+Generation an integration token from notion and connect it to your workspace.
+Get your workspace Database token (you can get it from workspace url also)
+Make env.local and add environment variable accoring to env.local.example file
 ## Getting Started
 
 First, run the development server:
