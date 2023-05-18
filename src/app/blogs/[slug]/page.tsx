@@ -6,8 +6,8 @@ export default async function Blog({ params }: { params: { slug: string } }) {
   const blog = await fetchBlogBySlug(slug);
 
   return (
-    <div>
-      <ReactMarkdown>{blog}</ReactMarkdown>
+    <div className="max-w-2xl mx-auto p-8 shadow-2xl">
+      <ReactMarkdown className="prose ">{blog}</ReactMarkdown>
     </div>
   );
 }

@@ -16,17 +16,17 @@ export default async function Page() {
   return (
     <div className="container mx-auto py-8 font-sans">
       <h1 className="text-3xl mb-4">My Blogs</h1>
-      <div className="grid grid-cols-3 gap-4 ">
+      <div className="grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {response.map((blog) => (
           <Link href={`/blogs/${blog.slug}`} key={blog.id}>
-            <div className="border rounded p-4 max-w-[360px] flex flex-col justify-between shadow-lg hover:shadow-indigo-100 md:shadow-xl hover:md:shadow-indigo-100">
+            <div className="border rounded p-4 h-[400px] max-w-[360px] flex flex-col justify-between shadow-lg hover:shadow-indigo-100 md:shadow-xl hover:md:shadow-indigo-100">
               <div className="mb-4 flex justify-center">
                 <Image
                   src={blog.cover.url}
                   alt={blog.name}
-                  width={360}
-                  height={200}
-                  className="bg-blend-lighten rounded"
+                  width={300}
+                  height={150}
+                  className="bg-blend-lighten rounded h-[150px] w-[300px]"
                 />
               </div>
               <div>
