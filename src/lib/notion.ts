@@ -51,6 +51,25 @@ export function pageToBlog(page: any) {
   return formattedBlog;
 }
 
+function convertBlocksToMarkdown(blocks: any[]) {
+  let markdown = "";
+
+  blocks.forEach((block: { type: string; paragraph: { rich_text: any[]; }; image: { file: { url: any; }; }; }) => {
+    if (block.type === "paragraph") {
+      block.paragraph.rich_text.forEach((text: { text: { content: string; }; }) => {
+        markdown += text.text.content;
+      });
+      markdown += "\n\n";
+    } else if (block.type === "image") {
+      // Extract image URL or other relevant data
+      const imageUrl = block.image.file.url;
+      markdown += `![Image](${imageUrl})\n\n`;
+    }
+  });
+
+  return markdown;
+}
+
 export async function fetchBlogBySlug(slug: string) {
   const databaseId = process.env.NOTION_DB;
   if (!databaseId) {
@@ -70,7 +89,7 @@ export async function fetchBlogBySlug(slug: string) {
     const post = await notion.blocks.children.list({
       block_id: response.results[0].id,
     });
-    const result=post.results;
-    return result;
+    const markdown = convertBlocksToMarkdown(post.results);
+    return markdown;
   }
 }
