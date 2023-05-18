@@ -6,13 +6,12 @@ export default async function Page() {
   const response = await fetchBlogs();
   const formatDate = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
-  
 
   return (
     <div className="container mx-auto py-8 font-sans">
@@ -45,9 +44,7 @@ export default async function Page() {
                 ))}
               </div>
               <div>
-                <h1 className="text-lg text-gray-700 mt-4">
-                  {blog.author}
-                </h1>
+                <h1 className="text-lg text-gray-700 mt-4">{blog.author}</h1>
               </div>
               <div className="text-gray-500 mt-2">{formatDate(blog.time)}</div>
             </div>

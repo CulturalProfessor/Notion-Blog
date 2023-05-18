@@ -50,3 +50,27 @@ export function pageToBlog(page: any) {
   };
   return formattedBlog;
 }
+
+export async function fetchBlogBySlug(slug: string) {
+  const databaseId = process.env.NOTION_DB;
+  if (!databaseId) {
+    throw new Error("NOTION_DB is missing");
+  } else {
+    const response = await notion.databases.query({
+      database_id: databaseId,
+      filter: {
+        property: "Slug",
+        formula: {
+          string: {
+            equals: slug,
+          },
+        },
+      },
+    });
+    const post = await notion.blocks.children.list({
+      block_id: response.results[0].id,
+    });
+    const result=post.results;
+    return result;
+  }
+}
