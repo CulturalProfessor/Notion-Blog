@@ -1,6 +1,7 @@
 import { fetchBlogs } from "../lib/notion";
 import Image from "next/image";
 import Link from "next/link";
+import Logo from "../../public/Logo.png";
 
 export default async function Page() {
   const response = await fetchBlogs();
@@ -15,7 +16,10 @@ export default async function Page() {
 
   return (
     <div className="container mx-auto py-8 font-sans">
-      <h1 className="text-3xl mb-4">My Blogs</h1>
+      <div className="flex justify-center items-center p-8">
+        <Image src={Logo} width={100} height={100} alt={"Logo"} />
+        <h1 className="text-3xl mb-4 px-2 mt-4">Blogs</h1>
+      </div>
       <div className="grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {response.map((blog) => (
           <Link href={`/blogs/${blog.slug}`} key={blog.id}>
