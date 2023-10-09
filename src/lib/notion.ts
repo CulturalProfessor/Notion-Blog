@@ -1,9 +1,11 @@
 import { Client } from "@notionhq/client";
+import cron from "node-cron";
 
 const notion = new Client({
   auth: process.env.NOTION_INTEGRATION_TOKEN,
 });
 
+// Function to fetch image URLs from Notion
 export async function fetchBlogs() {
   const databaseId = process.env.NOTION_DB;
   if (!databaseId) {
@@ -23,9 +25,29 @@ export async function fetchBlogs() {
       ],
     });
     const blogs = response.results.map((page) => pageToBlog(page));
+    console.log("Fetched image URLs:", blogs[0].cover.expiry_time);
     return blogs;
   }
 }
+
+// Define the cron schedule (runs every hour)
+const cronSchedule = "0 * * * *";
+
+// Schedule the job to fetch image URLs
+cron.schedule(cronSchedule, async () => {
+  console.log("Fetching image URLs from Notion...");
+  try {
+    await fetchBlogs();
+    console.log("Image URLs refreshed successfully.");
+  } catch (error) {
+    console.error("Error fetching image URLs:", error);
+  }
+});
+
+console.log("Scheduled job for refreshing image URLs started.");
+
+// Keep the script running
+process.stdin.resume();
 
 export function pageToBlog(page: any) {
   let cover = page.cover;
