@@ -1,4 +1,4 @@
-import { fetchBlogs } from "../lib/notion";
+import { fetchBlogs } from "./notion";
 import Image from "next/image";
 import Link from "next/link";
 import Logo from "../../public/Logo.png";

@@ -1,4 +1,4 @@
-import { fetchBlogBySlug } from "../../../lib/notion";
+import { fetchBlogBySlug } from "../../../pages/notion";
 import ReactMarkdown from "react-markdown";
 
 export default async function Blog({ params }: { params: { slug: string } }) {

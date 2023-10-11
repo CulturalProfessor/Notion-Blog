@@ -1,6 +1,0 @@
-{
-    "crons": [{
-      "path": "/src/app/page.tsx",
-      "schedule": "0 * * * *"
-    }]
-  }
