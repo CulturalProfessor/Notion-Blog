@@ -4,30 +4,6 @@ const notion = new Client({
   auth: process.env.NOTION_INTEGRATION_TOKEN,
 });
 
-// Function to fetch image URLs from Notion
-export async function fetchBlogs() {
-  const databaseId = process.env.NOTION_DB;
-  if (!databaseId) {
-    throw new Error("NOTION_DB is missing");
-  } else {
-    const response = await notion.databases.query({
-      database_id: databaseId,
-      filter: {
-        property: "Published",
-        checkbox: { equals: true },
-      },
-      sorts: [
-        {
-          property: "Created",
-          direction: "descending",
-        },
-      ],
-    });
-    const blogs = response.results.map((page) => pageToBlog(page));
-    return blogs;
-  }
-}
-
 export function pageToBlog(page: any) {
   let cover = page.cover;
   if (cover.type == "file") {
@@ -55,18 +31,26 @@ export function pageToBlog(page: any) {
 function convertBlocksToMarkdown(blocks: any[]) {
   let markdown = "";
 
-  blocks.forEach((block: { type: string; paragraph: { rich_text: any[]; }; image: { file: { url: any; }; }; }) => {
-    if (block.type === "paragraph") {
-      block.paragraph.rich_text.forEach((text: { text: { content: string; }; }) => {
-        markdown += text.text.content;
-      });
-      markdown += "\n\n";
-    } else if (block.type === "image") {
-      // Extract image URL or other relevant data
-      const imageUrl = block.image.file.url;
-      markdown += `![Image](${imageUrl})\n\n`;
+  blocks.forEach(
+    (block: {
+      type: string;
+      paragraph: { rich_text: any[] };
+      image: { file: { url: any } };
+    }) => {
+      if (block.type === "paragraph") {
+        block.paragraph.rich_text.forEach(
+          (text: { text: { content: string } }) => {
+            markdown += text.text.content;
+          }
+        );
+        markdown += "\n\n";
+      } else if (block.type === "image") {
+        // Extract image URL or other relevant data
+        const imageUrl = block.image.file.url;
+        markdown += `![Image](${imageUrl})\n\n`;
+      }
     }
-  });
+  );
 
   return markdown;
 }

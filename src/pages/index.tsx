@@ -5,6 +5,7 @@ import Github from "../../public/Github.png";
 import { GetStaticProps } from "next";
 import { Client } from "@notionhq/client";
 import { pageToBlog } from "../lib/notion";
+
 const notion = new Client({
   auth: process.env.NOTION_INTEGRATION_TOKEN,
 });
@@ -33,7 +34,7 @@ export const getStaticProps: GetStaticProps =async () => {
       props: {
         blogs,
       },
-      revalidate: 1,
+      revalidate: 100000,
     };
   }
 };
@@ -61,7 +62,7 @@ export default function Page({blogs}:any) {
       <div className="grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-12 justify-center items-center">
         {response.map((blog:any) => (
           <Link href={`/blogs/${blog.slug}`} key={blog.id}>
-            <div className="border rounded p-4 h-[400px] max-w-[360px] flex flex-col justify-between shadow-lg hover:shadow-indigo-100 md:shadow-xl hover:md:shadow-indigo-100">
+            <div className="border rounded p-4 h-[400px] max-w-[360px] flex flex-col justify-between shadow-lg transition duration-300 hover:shadow-indigo-100 md:shadow-xl hover:md:shadow-indigo-100">
               <div className="mb-4 flex justify-center">
                 <Image
                   src={blog.cover.url}
@@ -77,9 +78,17 @@ export default function Page({blogs}:any) {
               </div>
               <div>
                 {blog.tags.map((tag: any) => (
+                  tag.name=="Work"?
                   <span
                     key={tag.id}
                     className="inline-block bg-red-200 text-gray-800 text-sm rounded-full px-2 py-1 mt-2"
+                  >
+                    {tag.name}
+                  </span>
+                  :
+                  <span
+                    key={tag.id}
+                    className="inline-block bg-blue-200 text-gray-800 text-sm rounded-full px-2 py-1 mt-2"
                   >
                     {tag.name}
                   </span>
