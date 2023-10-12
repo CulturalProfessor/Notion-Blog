@@ -78,3 +78,23 @@ export async function fetchBlogBySlug(slug: string) {
     return markdown;
   }
 }
+
+export async function fetchAllPaths(): Promise<string[]> {
+  const databaseId = process.env.NOTION_DB;
+  if (!databaseId) {
+    throw new Error("NOTION_DB is missing");
+  }
+
+  const response = await notion.databases.query({
+    database_id: databaseId,
+  });
+
+  const slugs: string[] = response.results
+    .filter((page) => "properties" in page)
+    .map((page: any) => {
+      const path="/blogs/"+page.properties.Slug.formula.string
+      return path;
+    });
+
+  return slugs;
+}
