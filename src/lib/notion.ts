@@ -28,31 +28,49 @@ export function pageToBlog(page: any) {
   return formattedBlog;
 }
 
-function convertBlocksToMarkdown(blocks: any[]) {
+function convertBlocksToMarkdown(blocks: any[]): string {
   let markdown = "";
 
-  blocks.forEach(
-    (block: {
-      type: string;
-      paragraph: { rich_text: any[] };
-      image: { file: { url: any } };
-    }) => {
-      if (block.type === "paragraph") {
-        block.paragraph.rich_text.forEach(
-          (text: { text: { content: string } }) => {
-            markdown += text.text.content;
-          }
-        );
-        markdown += "\n\n";
-      } else if (block.type === "image") {
-        // Extract image URL or other relevant data
-        const imageUrl = block.image.file.url;
-        markdown += `![Image](${imageUrl})\n\n`;
-      }
+  blocks.forEach((block: any) => {
+    switch (block.type) {
+      case "paragraph":
+        markdown += processParagraphBlock(block);
+        break;
+      case "image":
+        markdown += processImageBlock(block);
+        break;
+      // Add support for other block types here
+      default:
+        break;
     }
-  );
+  });
 
   return markdown;
+}
+
+function processParagraphBlock(block: any): string {
+  const richText = block.paragraph.rich_text;
+  let paragraphText = "";
+
+  richText.forEach((text: any) => {
+    if (text.annotations.bold) {
+      paragraphText += `**${text.text.content}**`;
+    } else {
+      paragraphText += text.text.content;
+    }
+    if (text.annotations.italic) {
+      paragraphText = `_${paragraphText}_`;
+    }
+  });
+
+  paragraphText += "\n\n";
+
+  return paragraphText;
+}
+
+function processImageBlock(block: any): string {
+  const imageUrl = block.image.file.url;
+  return `![Image](${imageUrl})\n\n`;
 }
 
 export async function fetchBlogBySlug(slug: string) {

@@ -11,7 +11,7 @@ const notion = new Client({
 });
 
 // Function to fetch image URLs from Notion
-export const getStaticProps: GetStaticProps =async () => {
+export const getStaticProps: GetStaticProps = async () => {
   const databaseId = process.env.NOTION_DB;
   if (!databaseId) {
     throw new Error("NOTION_DB is missing");
@@ -39,8 +39,8 @@ export const getStaticProps: GetStaticProps =async () => {
   }
 };
 
-export default function Page({blogs}:any) {
-  const response=blogs;
+export default function Page({ blogs }: any) {
+  const response = blogs;
   const formatDate = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = {
       year: "numeric",
@@ -50,7 +50,7 @@ export default function Page({blogs}:any) {
     const locale = "en-US";
     return new Date(dateString).toLocaleDateString(locale, options);
   };
-  
+
   return (
     <div className="container mx-auto py-8 font-sans">
       <Link href={"https://github.com/CulturalProfessor/Notion-Blog"}>
@@ -60,7 +60,7 @@ export default function Page({blogs}:any) {
         </div>
       </Link>
       <div className="grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-12 justify-center items-center">
-        {response.map((blog:any) => (
+        {response.map((blog: any) => (
           <Link href={`/blogs/${blog.slug}`} key={blog.id}>
             <div className="border rounded p-4 h-[400px] max-w-[360px] flex flex-col justify-between shadow-lg transition duration-300 hover:shadow-indigo-100 md:shadow-xl hover:md:shadow-indigo-100">
               <div className="mb-4 flex justify-center">
@@ -77,22 +77,23 @@ export default function Page({blogs}:any) {
                 <p className="text-gray-600">{blog.description}</p>
               </div>
               <div>
-                {blog.tags.map((tag: any) => (
-                  tag.name=="Work"?
-                  <span
-                    key={tag.id}
-                    className="inline-block bg-red-200 text-gray-800 text-sm rounded-full px-2 py-1 mt-2"
-                  >
-                    {tag.name}
-                  </span>
-                  :
-                  <span
-                    key={tag.id}
-                    className="inline-block bg-blue-200 text-gray-800 text-sm rounded-full px-2 py-1 mt-2"
-                  >
-                    {tag.name}
-                  </span>
-                ))}
+                {blog.tags.map((tag: any) =>
+                  tag.name == "Work" ? (
+                    <span
+                      key={tag.id}
+                      className="inline-block bg-red-200 text-gray-800 text-sm rounded-full px-2 py-1 mt-2"
+                    >
+                      {tag.name}
+                    </span>
+                  ) : (
+                    <span
+                      key={tag.id}
+                      className="inline-block bg-blue-200 text-gray-800 text-sm rounded-full px-2 py-1 mt-2"
+                    >
+                      {tag.name}
+                    </span>
+                  )
+                )}
               </div>
               <div>
                 <h1 className="text-lg text-gray-700 mt-4">{blog.author}</h1>
